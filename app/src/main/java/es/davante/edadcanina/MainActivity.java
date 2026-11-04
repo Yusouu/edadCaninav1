@@ -7,11 +7,57 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int FACTOR_CANINO = 7;
+    private static final int EDAD_MINIMA = 1;
+    private static final int EDAD_MAXIMA = 30;
+
+    private EditText ageEdit;
+    private TextView resultText;
+
+    private void mostrarError(String mensaje) {
+        // 1. Mostrar el mensaje en el EditText (setError)
+        ageEdit.setError(mensaje);
+
+        // 2. Poner el foco en el EditText (requestFocus)
+        ageEdit.requestFocus();
+
+        // 3. Borrar el resultado anterior del TextView
+        resultText.setText("");
+    }
+
+    private void calcularEdad() {
+
+        EditText editText = findViewById(R.id.age_input);
+        TextView textView = findViewById(R.id.result_text);
+
+        String texto = editText.getText().toString().trim();
+
+        if (texto.isEmpty()) {
+            mostrarError(getString(R.string.error_vacio));
+            return;
+        }
+
+        int edad;
+        try {
+            edad = Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            mostrarError(getString(R.string.error_no_numero));
+            return;
+        }
+
+        if (edad < EDAD_MINIMA || edad > EDAD_MAXIMA) {
+            mostrarError(getString(R.string.error_rango, EDAD_MINIMA, EDAD_MAXIMA));
+            return;
+        }
+
+        editText.setError(null);
+        int resultadoCanino = edad * FACTOR_CANINO;
+        textView.setText(getString(R.string.tu_edad_format, resultadoCanino));
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,19 +66,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Declaramos variables
+        ageEdit = findViewById(R.id.age_input);
+        resultText = findViewById(R.id.result_text);
         EditText ageEdit = findViewById(R.id.age_input);
         TextView resultText = findViewById(R.id.result_text);
         Button button1 = findViewById(R.id.btn_calc);
 
 
         // Implementar el boton (setOnClickListener)
-        button1.setOnClickListener(view -> {
-
-            String ageString = ageEdit.getText().toString();
-            int age = Integer.parseInt(ageString);
-            int dogAge = age * 7;
-            resultText.setText(getString(R.string.tu_edad_format, dogAge));
-        });
+        button1.setOnClickListener(view -> calcularEdad());
 
 
     }
