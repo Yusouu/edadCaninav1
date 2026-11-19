@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private EdadCaninaModelo modelo;
+    private EdadCaninaControlador controlador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         modelo = new EdadCaninaModelo();
-        binding.setModelo(modelo);
+        controlador = new EdadCaninaControlador(modelo);
 
-        binding.btnCalc.setOnClickListener(view ->
-                modelo.calcularEdadCanina(modelo.getEntradaEdad())
-        );
+        binding.setModelo(modelo);
+        binding.setControlador(controlador);
     }
 }
