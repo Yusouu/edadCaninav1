@@ -1,39 +1,31 @@
 package es.davante.edadcanina;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import es.davante.edadcanina.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int FACTOR_CANINO = 7;
-    private static final int EDAD_MINIMA = 1;
+    private static final int EDAD_MINIMA = 0;
     private static final int EDAD_MAXIMA = 30;
 
-    private EditText ageEdit;
-    private TextView resultText;
+    // Usamos el binding generado desde activity_main.xml en lugar de findViewById
+    private ActivityMainBinding binding;
 
     private void mostrarError(String mensaje) {
-        // 1. Mostrar el mensaje en el EditText (setError)
-        ageEdit.setError(mensaje);
-
-        // 2. Poner el foco en el EditText (requestFocus)
-        ageEdit.requestFocus();
-
-        // 3. Borrar el resultado anterior del TextView
-        resultText.setText("");
+        // Mostramos el error en el campo de entrada y limpiamos el resultado anterior
+        binding.ageInput.setError(mensaje);
+        binding.ageInput.requestFocus();
+        binding.resultText.setText("");
     }
 
     private void calcularEdad() {
-
-        EditText editText = findViewById(R.id.age_input);
-        TextView textView = findViewById(R.id.result_text);
-
-        String texto = editText.getText().toString().trim();
+        String texto = binding.ageInput.getText().toString().trim();
 
         if (texto.isEmpty()) {
             mostrarError(getString(R.string.error_vacio));
@@ -53,29 +45,20 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        editText.setError(null);
+        // Limpiamos el error si la validación ha sido correcta
+        binding.ageInput.setError(null);
         int resultadoCanino = edad * FACTOR_CANINO;
-        textView.setText(getString(R.string.tu_edad_format, resultadoCanino));
+        binding.resultText.setText(getString(R.string.tu_edad_format, resultadoCanino));
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
 
-        // Declaramos variables
-        ageEdit = findViewById(R.id.age_input);
-        resultText = findViewById(R.id.result_text);
-        EditText ageEdit = findViewById(R.id.age_input);
-        TextView resultText = findViewById(R.id.result_text);
-        Button button1 = findViewById(R.id.btn_calc);
+        // Inflamos el layout envuelto en <layout> y obtenemos el binding sin findViewById
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-
-        // Implementar el boton (setOnClickListener)
-        button1.setOnClickListener(view -> calcularEdad());
-
-
+        binding.btnCalc.setOnClickListener(view -> calcularEdad());
     }
 }
