@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="es.davante.edadcanina.EdadCaninaModelo" />
         <import type="es.davante.edadcanina.Validacion" />
         <variable
             name="modelo"
@@ -53,7 +55,10 @@
             android:inputType="number"
             android:maxLength="2"
             android:text="@={modelo.entradaEdad}"
-            android:textSize="48sp" />
+            android:textSize="48sp"
+            app:edadMaxima="@{EdadCaninaModelo.EDAD_MAXIMA}"
+            app:edadMinima="@{EdadCaninaModelo.EDAD_MINIMA}"
+            app:errorValidacion="@{modelo.validacion}" />
 
         <TextView
             android:id="@+id/result_text"
