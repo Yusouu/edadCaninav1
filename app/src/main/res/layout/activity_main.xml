@@ -72,6 +72,15 @@
             android:text="@{modelo.validacion == Validacion.OK &amp;&amp; modelo.edadCanina > 0 ? @string/tu_edad_format(modelo.edadCanina) : ``}"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/etapa_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@{modelo.validacion == Validacion.OK &amp;&amp; modelo.edadCanina > 0 ? modelo.etapaVida : ``}"
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/btn_calc"
             android:layout_width="match_parent"

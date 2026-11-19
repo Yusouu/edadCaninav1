@@ -191,3 +191,19 @@ Comprueba en GitHub que tu fork tiene ahora dos ramas: `main` y `v2-validacion`.
 - [ ] No quedan números mágicos en `MainActivity`.
 - [ ] `onCreate()` solo prepara la pantalla; la lógica está en `calcularEdad()`.
 - [ ] El trabajo está en la rama `v2-validacion`, no en `main`.
+
+## EdadCaninaMVC
+
+### Reto realizado y cómo lo he resuelto
+He puesto un texto debajo del resultado que dice si el perro es cachorro, adulto o viejo según los años que le salgan. Lo he metido en `EdadCaninaModelo` para que lo calcule al darle a calcular y lo quite al darle a limpiar, sin tocar cosas de Android dentro del modelo. Luego lo he sacado por pantalla en `activity_main.xml` con DataBinding y he añadido un par de pruebas más en `EdadCaninaModeloTest` para ver que va bien.
+
+### Explícalo con tus palabras
+
+1. **Separación de responsabilidades en MVC:**
+   El modelo lleva los datos y las cuentas sin cosas de pantalla, así puedo pasar los tests de JUnit sin abrir el emulador. La vista en el XML y el adaptador solo muestran lo que toca y los fallos. El controlador atiende cuando pulsas los botones y habla con el modelo, para que `MainActivity` no tenga tanto lío metido.
+
+2. **Funcionamiento de DataBinding, modelo observable y `@BindingAdapter`:**
+   Con `BaseObservable`, `@Bindable` y `notifyPropertyChanged` el modelo avisa solo cuando cambia algo y no hace falta andar con `findViewById`. Con `@={...}` se queda pillado lo que escribes en el campo de texto y con el `@BindingAdapter` los errores salen desde el XML según la validación.
+
+3. **Conservación del estado al girar la pantalla y utilidad de los tests:**
+   Si giras la pantalla se vuelve a crear la actividad, así que con `onSaveInstanceState` guardo los datos y luego los vuelvo a poner en `onCreate` para que no se pierdan. Los tests de JUnit valen para comprobar rápido que las cuentas y los errores no fallan sin tener que probarlo todo a mano cada vez.

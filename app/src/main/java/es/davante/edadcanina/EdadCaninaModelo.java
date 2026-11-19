@@ -12,6 +12,7 @@ public class EdadCaninaModelo extends BaseObservable {
     private String entradaEdad = "";
     private int edadHumana;
     private int edadCanina;
+    private String etapaVida = "";
     private Validacion validacion = Validacion.OK;
 
     @Bindable
@@ -38,6 +39,11 @@ public class EdadCaninaModelo extends BaseObservable {
     }
 
     @Bindable
+    public String getEtapaVida() {
+        return etapaVida;
+    }
+
+    @Bindable
     public Validacion getValidacion() {
         return validacion;
     }
@@ -49,10 +55,28 @@ public class EdadCaninaModelo extends BaseObservable {
         }
     }
 
+    private void setEtapaVida(String etapaVida) {
+        String valor = etapaVida == null ? "" : etapaVida;
+        if (!valor.equals(this.etapaVida)) {
+            this.etapaVida = valor;
+            notifyPropertyChanged(BR.etapaVida);
+        }
+    }
+
     private void setValidacion(Validacion validacion) {
         if (this.validacion != validacion) {
             this.validacion = validacion;
             notifyPropertyChanged(BR.validacion);
+        }
+    }
+
+    private String calcularEtapa(int edadCaninaCalculada) {
+        if (edadCaninaCalculada <= 14) {
+            return "Cachorro / Joven";
+        } else if (edadCaninaCalculada <= 49) {
+            return "Adulto";
+        } else {
+            return "Senior";
         }
     }
 
@@ -62,6 +86,7 @@ public class EdadCaninaModelo extends BaseObservable {
 
         if (textoLimpio.isEmpty()) {
             setEdadCanina(0);
+            setEtapaVida("");
             setValidacion(Validacion.VACIO);
             return validacion;
         }
@@ -71,18 +96,22 @@ public class EdadCaninaModelo extends BaseObservable {
             edadParseada = Integer.parseInt(textoLimpio);
         } catch (NumberFormatException e) {
             setEdadCanina(0);
+            setEtapaVida("");
             setValidacion(Validacion.NO_NUMERO);
             return validacion;
         }
 
         if (edadParseada < EDAD_MINIMA || edadParseada > EDAD_MAXIMA) {
             setEdadCanina(0);
+            setEtapaVida("");
             setValidacion(Validacion.FUERA_DE_RANGO);
             return validacion;
         }
 
         edadHumana = edadParseada;
-        setEdadCanina(edadParseada * FACTOR_CANINO);
+        int canina = edadParseada * FACTOR_CANINO;
+        setEdadCanina(canina);
+        setEtapaVida(calcularEtapa(canina));
         setValidacion(Validacion.OK);
         return validacion;
     }
@@ -91,6 +120,7 @@ public class EdadCaninaModelo extends BaseObservable {
         setEntradaEdad("");
         edadHumana = 0;
         setEdadCanina(0);
+        setEtapaVida("");
         setValidacion(Validacion.OK);
     }
 }

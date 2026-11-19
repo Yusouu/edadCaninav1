@@ -51,4 +51,10 @@ public class EdadCaninaModeloTest {
         assertEquals(Validacion.OK, resultado);
         assertEquals(0, modelo.getEdadCanina());
     }
+    @Test
+    public void edadValida_calculaEtapaVida() {
+        modelo.calcularEdadCanina("6");
+        assertEquals(42, modelo.getEdadCanina());
+        assertEquals("Adulto", modelo.getEtapaVida());
+    }
 }
